@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Search Results - ChefMate</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="ChefMate Logo" class="nav-logo">
+                    <h1 class="nav-title">ChefMate</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="search.html" class="nav-link active">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="favorites.html" class="nav-link">Favorites</a>
+                    </li>
+                </ul>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Search Header -->
+        <section class="search-header">
+            <div class="container">
+                <div class="search-info">
+                    <h1 class="search-title">Recipe Search Results</h1>
+                    <p class="search-subtitle" id="searchSubtitle">
+                        Finding recipes with your ingredients...
+                    </p>
+                </div>
+                
+                <!-- Quick Search Bar -->
+                <div class="quick-search">
+                    <form class="search-form" id="quickSearchForm">
+                        <div class="search-input-group">
+                            <input 
+                                type="text" 
+                                id="quickIngredients" 
+                                class="search-input"
+                                placeholder="Add more ingredients..."
+                            >
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-card">
+                    <h3 class="filters-title">Filter Results</h3>
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label class="filter-label">Cooking Time</label>
+                            <select class="filter-select" id="timeFilter">
+                                <option value="">Any time</option>
+                                <option value="15">Under 15 min</option>
+                                <option value="30">Under 30 min</option>
+                                <option value="60">Under 1 hour</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Difficulty</label>
+                            <select class="filter-select" id="difficultyFilter">
+                                <option value="">Any difficulty</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Diet</label>
+                            <select class="filter-select" id="dietFilter">
+                                <option value="">Any diet</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="gluten-free">Gluten-Free</option>
+                                <option value="dairy-free">Dairy-Free</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Sort By</label>
+                            <select class="filter-select" id="sortFilter">
+                                <option value="relevance">Relevance</option>
+                                <option value="time">Cooking Time</option>
+                                <option value="popularity">Popularity</option>
+                                <option value="rating">Rating</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="container">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <p>Searching for delicious recipes...</p>
+                </div>
+
+                <!-- Error State -->
+                <div class="error-state" id="errorState" style="display: none;">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Oops! Something went wrong</h3>
+                    <p id="errorMessage">We couldn't find recipes right now. Please try again.</p>
+                    <button class="btn btn-primary" onclick="retrySearch()">Try Again</button>
+                </div>
+
+                <!-- No Results State -->
+                <div class="no-results-state" id="noResultsState" style="display: none;">
+                    <div class="no-results-icon">🔍</div>
+                    <h3>No recipes found</h3>
+                    <p>Try different ingredients or adjust your filters</p>
+                    <a href="index.html" class="btn btn-primary">Start New Search</a>
+                </div>
+
+                <!-- Results Grid -->
+                <div class="results-grid" id="resultsGrid" style="display: none;">
+                    <!-- Recipe cards will be dynamically inserted here -->
+                </div>
+
+                <!-- Load More Button -->
+                <div class="load-more-section" id="loadMoreSection" style="display: none;">
+                    <button class="btn btn-secondary btn-large" id="loadMoreBtn">
+                        Load More Recipes
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Suggestions -->
+        <section class="ai-suggestions" id="aiSuggestions" style="display: none;">
+            <div class="container">
+                <div class="ai-card">
+                    <div class="ai-header">
+                        <div class="ai-icon">🤖</div>
+                        <h3>AI Cooking Tips</h3>
+                    </div>
+                    <div class="ai-content" id="aiContent">
+                        <!-- AI suggestions will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>ChefMate</h3>
+                    <p>Smart cooking made simple</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Recipe Card Template -->
+    <template id="recipeCardTemplate">
+        <div class="recipe-card" data-recipe-id="">
+            <div class="recipe-image-container">
+                <img src="" alt="" class="recipe-image">
+                <button class="favorite-btn" aria-label="Add to favorites">
+                    <span class="heart-icon">♡</span>
+                </button>
+                <div class="recipe-badges">
+                    <!-- Badges will be inserted here -->
+                </div>
+            </div>
+            <div class="recipe-content">
+                <h3 class="recipe-title"></h3>
+                <div class="recipe-meta">
+                    <span class="recipe-time">
+                        <span class="time-icon">⏱️</span>
+                        <span class="time-text"></span>
+                    </span>
+                    <span class="recipe-difficulty">
+                        <span class="difficulty-dots"></span>
+                    </span>
+                    <span class="recipe-rating">
+                        <span class="stars"></span>
+                        <span class="rating-text"></span>
+                    </span>
+                </div>
+                <p class="recipe-description"></p>
+                <div class="recipe-ingredients">
+                    <span class="ingredients-label">Key ingredients:</span>
+                    <span class="ingredients-list"></span>
+                </div>
+                <div class="recipe-actions">
+                    <button class="btn btn-primary btn-small view-recipe-btn">
+                        View Recipe
+                    </button>
+                    <button class="btn btn-secondary btn-small ai-tips-btn">
+                        AI Tips
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/search.js"></script>
+</body>
+</html>

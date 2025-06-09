@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - ChefMate</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="ChefMate Logo" class="nav-logo">
+                    <h1 class="nav-title">ChefMate</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="search.html" class="nav-link">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="favorites.html" class="nav-link active">Favorites</a>
+                    </li>
+                </ul>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Favorites Header -->
+        <section class="favorites-header">
+            <div class="container">
+                <div class="favorites-header-content">
+                    <h1 class="favorites-title">My Favorite Recipes</h1>
+                    <p class="favorites-subtitle">
+                        Your saved recipes and personal cooking notes
+                    </p>
+                </div>
+                
+                <!-- Favorites Stats -->
+                <div class="favorites-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalFavorites">0</span>
+                        <span class="stat-label">Saved Recipes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalNotes">0</span>
+                        <span class="stat-label">Personal Notes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCollections">0</span>
+                        <span class="stat-label">Collections</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Favorites Controls -->
+        <section class="favorites-controls">
+            <div class="container">
+                <div class="controls-card">
+                    <div class="controls-left">
+                        <div class="search-favorites">
+                            <input 
+                                type="text" 
+                                id="searchFavorites" 
+                                class="search-input"
+                                placeholder="Search your favorites..."
+                            >
+                        </div>
+                        
+                        <div class="filter-favorites">
+                            <select class="filter-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="dinner">Dinner</option>
+                                <option value="dessert">Dessert</option>
+                                <option value="snack">Snack</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-right">
+                        <div class="view-toggle">
+                            <button class="view-btn active" id="gridView" data-view="grid">
+                                <span class="view-icon">⊞</span>
+                            </button>
+                            <button class="view-btn" id="listView" data-view="list">
+                                <span class="view-icon">☰</span>
+                            </button>
+                        </div>
+                        
+                        <div class="sort-favorites">
+                            <select class="filter-select" id="sortFavorites">
+                                <option value="recent">Recently Added</option>
+                                <option value="alphabetical">Alphabetical</option>
+                                <option value="rating">Rating</option>
+                                <option value="cookTime">Cook Time</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Favorites Content -->
+        <section class="favorites-content">
+            <div class="container">
+                <!-- Empty State -->
+                <div class="empty-favorites" id="emptyState">
+                    <div class="empty-icon">💝</div>
+                    <h3>No favorites yet</h3>
+                    <p>Start exploring recipes and save your favorites here!</p>
+                    <a href="index.html" class="btn btn-primary">Find Recipes</a>
+                </div>
+
+                <!-- Favorites Grid -->
+                <div class="favorites-grid" id="favoritesGrid" style="display: none;">
+                    <!-- Favorite recipe cards will be inserted here -->
+                </div>
+
+                <!-- Favorites List -->
+                <div class="favorites-list" id="favoritesList" style="display: none;">
+                    <!-- Favorite recipe list items will be inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Collections Section -->
+        <section class="collections-section" id="collectionsSection" style="display: none;">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Recipe Collections</h2>
+                    <button class="btn btn-primary btn-small" id="createCollectionBtn">
+                        Create Collection
+                    </button>
+                </div>
+                
+                <div class="collections-grid" id="collectionsGrid">
+                    <!-- Collections will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>ChefMate</h3>
+                    <p>Smart cooking made simple</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Favorite Recipe Card Template -->
+    <template id="favoriteCardTemplate">
+        <div class="favorite-card" data-recipe-id="">
+            <div class="favorite-image-container">
+                <img src="" alt="" class="favorite-image">
+                <button class="remove-favorite-btn" aria-label="Remove from favorites">
+                    <span class="remove-icon">×</span>
+                </button>
+                <div class="favorite-badges">
+                    <!-- Badges will be inserted here -->
+                </div>
+            </div>
+            <div class="favorite-content">
+                <h3 class="favorite-title"></h3>
+                <div class="favorite-meta">
+                    <span class="favorite-time">
+                        <span class="time-icon">⏱️</span>
+                        <span class="time-text"></span>
+                    </span>
+                    <span class="favorite-rating">
+                        <span class="stars"></span>
+                    </span>
+                </div>
+                <div class="favorite-notes">
+                    <textarea 
+                        class="notes-input" 
+                        placeholder="Add your personal notes..."
+                        rows="2"
+                    ></textarea>
+                </div>
+                <div class="favorite-actions">
+                    <button class="btn btn-primary btn-small view-recipe-btn">
+                        View Recipe
+                    </button>
+                    <button class="btn btn-secondary btn-small save-notes-btn">
+                        Save Notes
+                    </button>
+                </div>
+                <div class="favorite-date">
+                    <span class="date-label">Added:</span>
+                    <span class="date-value"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Favorite List Item Template -->
+    <template id="favoriteListTemplate">
+        <div class="favorite-list-item" data-recipe-id="">
+            <div class="list-item-image">
+                <img src="" alt="" class="list-image">
+            </div>
+            <div class="list-item-content">
+                <div class="list-item-header">
+                    <h3 class="list-item-title"></h3>
+                    <button class="remove-favorite-btn" aria-label="Remove from favorites">
+                        <span class="remove-icon">×</span>
+                    </button>
+                </div>
+                <div class="list-item-meta">
+                    <span class="list-time"></span>
+                    <span class="list-rating"></span>
+                    <span class="list-difficulty"></span>
+                </div>
+                <div class="list-item-notes">
+                    <p class="notes-preview"></p>
+                </div>
+                <div class="list-item-actions">
+                    <button class="btn btn-primary btn-small view-recipe-btn">
+                        View Recipe
+                    </button>
+                    <button class="btn btn-secondary btn-small edit-notes-btn">
+                        Edit Notes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Create Collection Modal -->
+    <div class="modal" id="createCollectionModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Collection</h3>
+                <button class="modal-close" id="closeCreateCollection">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createCollectionForm">
+                    <div class="form-group">
+                        <label for="collectionName">Collection Name</label>
+                        <input type="text" id="collectionName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="collectionDescription">Description (Optional)</label>
+                        <textarea id="collectionDescription" class="form-textarea" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelCreateCollection">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Create Collection
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/favorites.js"></script>
+</body>
+</html>

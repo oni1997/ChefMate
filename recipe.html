@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details - ChefMate</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="ChefMate Logo" class="nav-logo">
+                    <h1 class="nav-title">ChefMate</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="search.html" class="nav-link">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="favorites.html" class="nav-link">Favorites</a>
+                    </li>
+                </ul>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+            <p>Loading recipe details...</p>
+        </div>
+
+        <!-- Recipe Content -->
+        <div class="recipe-container" id="recipeContainer" style="display: none;">
+            <!-- Recipe Header -->
+            <section class="recipe-header">
+                <div class="container">
+                    <div class="recipe-header-content">
+                        <div class="recipe-image-section">
+                            <img src="" alt="" class="recipe-hero-image" id="recipeImage">
+                            <div class="recipe-overlay">
+                                <button class="favorite-btn-large" id="favoriteBtn" aria-label="Add to favorites">
+                                    <span class="heart-icon">♡</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="recipe-info-section">
+                            <div class="breadcrumb">
+                                <a href="search.html" class="breadcrumb-link">← Back to Results</a>
+                            </div>
+                            
+                            <h1 class="recipe-title" id="recipeTitle"></h1>
+                            
+                            <div class="recipe-meta-grid">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Cook Time</span>
+                                        <span class="meta-value" id="cookTime"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="meta-item">
+                                    <span class="meta-icon">👥</span>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Servings</span>
+                                        <div class="serving-controls">
+                                            <button class="serving-btn" id="decreaseServing">-</button>
+                                            <span class="meta-value" id="servings">4</span>
+                                            <button class="serving-btn" id="increaseServing">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="meta-item">
+                                    <span class="meta-icon">📊</span>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Difficulty</span>
+                                        <span class="meta-value" id="difficulty"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="meta-item">
+                                    <span class="meta-icon">⭐</span>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Rating</span>
+                                        <span class="meta-value" id="rating"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="recipe-badges" id="recipeBadges">
+                                <!-- Diet badges will be inserted here -->
+                            </div>
+                            
+                            <p class="recipe-summary" id="recipeSummary"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipe Content Grid -->
+            <section class="recipe-content-section">
+                <div class="container">
+                    <div class="recipe-grid">
+                        <!-- Ingredients Column -->
+                        <div class="ingredients-column">
+                            <div class="ingredients-card">
+                                <div class="card-header">
+                                    <h2>Ingredients</h2>
+                                    <button class="btn btn-secondary btn-small" id="addToShoppingList">
+                                        Add to Shopping List
+                                    </button>
+                                </div>
+                                
+                                <div class="ingredients-list" id="ingredientsList">
+                                    <!-- Ingredients will be inserted here -->
+                                </div>
+                                
+                                <div class="missing-ingredients" id="missingIngredients" style="display: none;">
+                                    <h3>Missing Ingredients</h3>
+                                    <ul id="missingList"></ul>
+                                    <button class="btn btn-primary btn-small" id="generateShoppingList">
+                                        Generate Shopping List
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Nutrition Info -->
+                            <div class="nutrition-card">
+                                <h3>Nutrition Information</h3>
+                                <div class="nutrition-grid" id="nutritionInfo">
+                                    <!-- Nutrition data will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instructions Column -->
+                        <div class="instructions-column">
+                            <div class="instructions-card">
+                                <div class="card-header">
+                                    <h2>Instructions</h2>
+                                    <button class="btn btn-primary btn-small" id="startCookingBtn">
+                                        Start Cooking Mode
+                                    </button>
+                                </div>
+                                
+                                <div class="instructions-list" id="instructionsList">
+                                    <!-- Instructions will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Cooking Coach -->
+            <section class="ai-coach-section" id="aiCoachSection">
+                <div class="container">
+                    <div class="ai-coach-card">
+                        <div class="ai-header">
+                            <div class="ai-icon">🤖</div>
+                            <h3>AI Cooking Coach</h3>
+                            <button class="btn btn-secondary btn-small" id="getAiTips">
+                                Get Cooking Tips
+                            </button>
+                        </div>
+                        
+                        <div class="ai-content" id="aiTipsContent">
+                            <p>Click "Get Cooking Tips" to receive personalized advice for this recipe!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cooking Timer Modal -->
+            <div class="modal" id="timerModal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Cooking Timer</h3>
+                        <button class="modal-close" id="closeTimer">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="timer-display">
+                            <span class="timer-time" id="timerDisplay">00:00</span>
+                        </div>
+                        <div class="timer-controls">
+                            <button class="btn btn-primary" id="startTimer">Start</button>
+                            <button class="btn btn-secondary" id="pauseTimer">Pause</button>
+                            <button class="btn btn-secondary" id="resetTimer">Reset</button>
+                        </div>
+                        <div class="timer-presets">
+                            <button class="preset-btn" data-minutes="5">5 min</button>
+                            <button class="preset-btn" data-minutes="10">10 min</button>
+                            <button class="preset-btn" data-minutes="15">15 min</button>
+                            <button class="preset-btn" data-minutes="30">30 min</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <h3>Recipe Not Found</h3>
+            <p>We couldn't load this recipe. It might have been removed or the link is incorrect.</p>
+            <a href="search.html" class="btn btn-primary">Back to Search</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>ChefMate</h3>
+                    <p>Smart cooking made simple</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/recipe.js"></script>
+</body>
+</html>

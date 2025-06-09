@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChefMate - Smart Recipe Generator</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="ChefMate Logo" class="nav-logo">
+                    <h1 class="nav-title">ChefMate</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link active">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="search.html" class="nav-link">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="favorites.html" class="nav-link">Favorites</a>
+                    </li>
+                </ul>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">What's in your kitchen?</h1>
+                    <p class="hero-subtitle">
+                        Turn your available ingredients into delicious recipes with AI-powered suggestions
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ingredient Input Section -->
+        <section class="ingredient-input">
+            <div class="container">
+                <div class="input-card">
+                    <h2 class="input-title">Enter Your Ingredients</h2>
+                    <form class="ingredient-form" id="ingredientForm">
+                        <div class="input-group">
+                            <label for="ingredients" class="input-label">
+                                What ingredients do you have? (separate with commas)
+                            </label>
+                            <textarea 
+                                id="ingredients" 
+                                name="ingredients" 
+                                class="ingredient-textarea"
+                                placeholder="e.g., chicken, tomatoes, onions, garlic, rice"
+                                rows="4"
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <!-- Dietary Preferences -->
+                        <div class="preferences-group">
+                            <h3 class="preferences-title">Dietary Preferences (Optional)</h3>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="diet" value="vegetarian">
+                                    <span class="checkmark"></span>
+                                    Vegetarian
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="diet" value="vegan">
+                                    <span class="checkmark"></span>
+                                    Vegan
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="diet" value="gluten-free">
+                                    <span class="checkmark"></span>
+                                    Gluten-Free
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="diet" value="dairy-free">
+                                    <span class="checkmark"></span>
+                                    Dairy-Free
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Cooking Time -->
+                        <div class="time-group">
+                            <label for="maxTime" class="input-label">Maximum Cooking Time (minutes)</label>
+                            <select id="maxTime" name="maxTime" class="time-select">
+                                <option value="">Any time</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60">1 hour</option>
+                                <option value="120">2 hours</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <span class="btn-text">Find Recipes</span>
+                            <span class="btn-loader" style="display: none;">
+                                <span class="spinner"></span>
+                                Searching...
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Suggestions -->
+        <section class="quick-suggestions">
+            <div class="container">
+                <h2 class="section-title">Popular Ingredient Combinations</h2>
+                <div class="suggestions-grid">
+                    <button class="suggestion-card" data-ingredients="chicken,rice,vegetables">
+                        <h3>Chicken & Rice</h3>
+                        <p>Classic comfort food combinations</p>
+                    </button>
+                    <button class="suggestion-card" data-ingredients="pasta,tomatoes,cheese">
+                        <h3>Pasta Night</h3>
+                        <p>Italian-inspired dishes</p>
+                    </button>
+                    <button class="suggestion-card" data-ingredients="eggs,bread,milk">
+                        <h3>Breakfast Basics</h3>
+                        <p>Start your day right</p>
+                    </button>
+                    <button class="suggestion-card" data-ingredients="potatoes,onions,cheese">
+                        <h3>Comfort Food</h3>
+                        <p>Hearty and satisfying meals</p>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Preview -->
+        <section class="features-preview">
+            <div class="container">
+                <h2 class="section-title">Why Choose ChefMate?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Cooking Coach</h3>
+                        <p>Get personalized cooking tips and guidance for perfect results every time</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Nutritional Info</h3>
+                        <p>See calories, dietary tags, and nutritional breakdown for every recipe</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <h3>Smart Timers</h3>
+                        <p>Built-in timers with step-by-step cooking process guidance</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Shopping Lists</h3>
+                        <p>Automatically generate organized lists for missing ingredients</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>ChefMate</h3>
+                    <p>Smart cooking made simple</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

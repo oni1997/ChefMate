@@ -1,6 +1,8 @@
 {
   "version": 2,
   "name": "chefmate",
+  "buildCommand": "echo 'No build needed for static site'",
+  "outputDirectory": ".",
   "functions": {
     "api/spoonacular.js": {
       "maxDuration": 30

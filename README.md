@@ -97,39 +97,9 @@ ChefMate/
 - Recipe guidance
 - Fallback to mock data when API unavailable
 
-## 🚀 Quick Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/chefmate)
 
-ChefMate is ready for Vercel deployment! See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
-
-### Quick Vercel Deployment:
-1. Push your code to GitHub
-2. Connect GitHub to Vercel
-3. Deploy with one click
-4. Set API keys in browser localStorage
-
-## Setup Instructions
-
-### 1. API Keys Setup
-
-**For Vercel Deployment (Recommended):**
-- API keys are configured server-side using environment variables
-- No user setup required - just use the app!
-- Set `SPOONACULAR_API_KEY` and `GEMINI_API_KEY` in Vercel dashboard
-
-**For Local Development:**
-1. Get API keys:
-   - [Spoonacular API](https://spoonacular.com/food-api) (free tier: 150 requests/day)
-   - [Gemini AI](https://makersuite.google.com/app/apikey) (optional)
-
-2. Set API keys in browser console:
-   ```javascript
-   localStorage.setItem('chefmate_spoonacular_key', 'YOUR_SPOONACULAR_KEY');
-   localStorage.setItem('chefmate_gemini_key', 'YOUR_GEMINI_KEY');
-   ```
-
-### 2. Local Development
+### Local Development
 1. Clone or download the project
 2. Open `index.html` in a modern web browser
 3. For best results, serve from a local web server:
@@ -144,7 +114,7 @@ ChefMate is ready for Vercel deployment! See [DEPLOYMENT.md](DEPLOYMENT.md) for 
    php -S localhost:8000
    ```
 
-### 3. Testing the Application
+### Testing the Application
 1. Open the application in your browser
 2. Enter ingredients like "chicken, rice, vegetables"
 3. Select dietary preferences if needed

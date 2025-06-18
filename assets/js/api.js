@@ -198,6 +198,15 @@ class ChefMateAPI {
     }
 
     /**
+     * Get detailed recipe information (alias for getRecipeInformation)
+     * @param {number} recipeId - Recipe ID
+     * @returns {Promise} Detailed recipe information
+     */
+    async getRecipeDetails(recipeId) {
+        return this.getRecipeInformation(recipeId);
+    }
+
+    /**
      * Get recipe instructions
      * @param {number} recipeId - Recipe ID
      * @returns {Promise} Recipe instructions

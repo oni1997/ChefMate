@@ -6,8 +6,7 @@
 class ChefMateAPI {
     constructor() {
         // Check if we're running on Vercel (has serverless functions)
-        this.isVercelDeployment = window.location.hostname.includes('vercel.app') ||
-                                  window.location.hostname.includes('localhost') && window.location.port === '';
+        this.isVercelDeployment = window.location.hostname.includes('vercel.app');
 
         if (this.isVercelDeployment) {
             // Use Vercel serverless functions (no API keys needed on client)
@@ -176,6 +175,12 @@ class ChefMateAPI {
      * @returns {Promise} Detailed recipe information
      */
     async getRecipeInformation(recipeId) {
+        // For local development without API keys, return mock data
+        if (!this.useServerlessAPI && (!this.spoonacularApiKey || this.spoonacularApiKey === 'YOUR_SPOONACULAR_API_KEY')) {
+            console.log('Using mock recipe data for local development');
+            return this.getMockRecipeData(recipeId);
+        }
+
         let url;
 
         if (this.useServerlessAPI) {
@@ -409,6 +414,99 @@ Keep tips practical, concise, and beginner-friendly. Format as a JSON object wit
         }
 
         return { tips: mockTips.slice(0, 4) };
+    }
+
+    /**
+     * Get mock recipe data for local development
+     * @param {number} recipeId - Recipe ID
+     * @returns {Object} Mock recipe data
+     */
+    getMockRecipeData(recipeId) {
+        return {
+            id: recipeId,
+            title: "Mock Recipe - Delicious Chicken Stir Fry",
+            image: "https://via.placeholder.com/556x370/FF6B6B/FFFFFF?text=Mock+Recipe",
+            readyInMinutes: 25,
+            servings: 4,
+            vegetarian: false,
+            vegan: false,
+            glutenFree: false,
+            dairyFree: false,
+            summary: "This is a mock recipe for local development. It demonstrates how the recipe page would look with real data from the Spoonacular API.",
+            extendedIngredients: [
+                {
+                    id: 1,
+                    name: "chicken breast",
+                    amount: 1,
+                    unit: "lb",
+                    original: "1 lb chicken breast, sliced"
+                },
+                {
+                    id: 2,
+                    name: "bell peppers",
+                    amount: 2,
+                    unit: "pieces",
+                    original: "2 bell peppers, sliced"
+                },
+                {
+                    id: 3,
+                    name: "soy sauce",
+                    amount: 3,
+                    unit: "tablespoons",
+                    original: "3 tablespoons soy sauce"
+                },
+                {
+                    id: 4,
+                    name: "garlic",
+                    amount: 3,
+                    unit: "cloves",
+                    original: "3 cloves garlic, minced"
+                },
+                {
+                    id: 5,
+                    name: "vegetable oil",
+                    amount: 2,
+                    unit: "tablespoons",
+                    original: "2 tablespoons vegetable oil"
+                }
+            ],
+            analyzedInstructions: [{
+                steps: [
+                    {
+                        number: 1,
+                        step: "Heat oil in a large skillet or wok over medium-high heat.",
+                        length: { number: 2, unit: "minutes" }
+                    },
+                    {
+                        number: 2,
+                        step: "Add chicken to the skillet and cook until golden brown and cooked through, about 6-8 minutes.",
+                        length: { number: 8, unit: "minutes" }
+                    },
+                    {
+                        number: 3,
+                        step: "Add bell peppers and garlic to the skillet and stir-fry for 3-4 minutes until peppers are tender-crisp."
+                    },
+                    {
+                        number: 4,
+                        step: "Pour soy sauce over the mixture and toss to combine. Cook for another 1-2 minutes."
+                    },
+                    {
+                        number: 5,
+                        step: "Serve immediately over rice or noodles. Enjoy your delicious stir fry!"
+                    }
+                ]
+            }],
+            nutrition: {
+                nutrients: [
+                    { name: "Calories", amount: 285, unit: "kcal" },
+                    { name: "Protein", amount: 32, unit: "g" },
+                    { name: "Carbohydrates", amount: 8, unit: "g" },
+                    { name: "Fat", amount: 14, unit: "g" },
+                    { name: "Fiber", amount: 2, unit: "g" },
+                    { name: "Sugar", amount: 5, unit: "g" }
+                ]
+            }
+        };
     }
 
     // ===== ERROR HANDLING =====

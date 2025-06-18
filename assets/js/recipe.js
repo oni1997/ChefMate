@@ -13,7 +13,17 @@ class ChefMateRecipe {
         this.cookingMode = false;
         this.timers = [];
         this.currentStep = 0;
-        
+
+        // Check if dependencies are loaded
+        if (!this.utils) {
+            console.error('ChefMateUtils not loaded');
+            return;
+        }
+        if (!this.api) {
+            console.error('ChefMateAPI not loaded');
+            return;
+        }
+
         this.init();
     }
 
@@ -26,15 +36,31 @@ class ChefMateRecipe {
     async loadRecipe() {
         const urlParams = new URLSearchParams(window.location.search);
         const recipeId = urlParams.get('id');
-        
+
         if (!recipeId) {
+            console.error('No recipe ID provided in URL');
+            this.showError();
+            return;
+        }
+
+        if (!this.api) {
+            console.error('ChefMateAPI not available');
+            this.showError();
+            return;
+        }
+
+        if (typeof this.api.getRecipeDetails !== 'function') {
+            console.error('getRecipeDetails method not available on API object');
+            console.log('Available API methods:', Object.getOwnPropertyNames(this.api));
             this.showError();
             return;
         }
 
         try {
             this.showLoading();
+            console.log('Loading recipe with ID:', recipeId);
             this.recipe = await this.api.getRecipeDetails(recipeId);
+            console.log('Recipe loaded:', this.recipe);
             this.originalServings = this.recipe.servings || 4;
             this.currentServings = this.originalServings;
             this.displayRecipe();
@@ -558,9 +584,20 @@ class ChefMateRecipe {
     }
 }
 
-// Initialize when DOM is loaded
+// Initialize when DOM is loaded and dependencies are available
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('recipeTitle')) {
-        window.chefMateRecipe = new ChefMateRecipe();
+        // Wait for dependencies to be loaded
+        const initializeRecipe = () => {
+            if (window.ChefMateAPI && window.ChefMateUtils) {
+                console.log('Initializing ChefMateRecipe...');
+                window.chefMateRecipe = new ChefMateRecipe();
+            } else {
+                console.log('Waiting for dependencies to load...');
+                setTimeout(initializeRecipe, 100);
+            }
+        };
+
+        initializeRecipe();
     }
 });

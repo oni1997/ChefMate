@@ -384,6 +384,183 @@ const Utils = {
     }
 };
 
+// ===== SHOPPING LIST MANAGEMENT =====
+const ShoppingList = {
+    // Get all shopping lists
+    getAll() {
+        return Storage.get('chefmate_shopping_lists', []);
+    },
+
+    // Create new shopping list
+    create(name, items = []) {
+        const lists = this.getAll();
+        const newList = {
+            id: Utils.generateId(),
+            name: name.trim(),
+            items: items.map(item => ({
+                id: Utils.generateId(),
+                name: item.name || item,
+                amount: item.amount || '',
+                unit: item.unit || '',
+                checked: false,
+                addedAt: new Date().toISOString()
+            })),
+            createdAt: new Date().toISOString(),
+            lastModified: new Date().toISOString()
+        };
+
+        lists.push(newList);
+        Storage.set('chefmate_shopping_lists', lists);
+        return newList;
+    },
+
+    // Add item to shopping list
+    addItem(listId, item) {
+        const lists = this.getAll();
+        const listIndex = lists.findIndex(list => list.id === listId);
+
+        if (listIndex !== -1) {
+            const newItem = {
+                id: Utils.generateId(),
+                name: item.name,
+                amount: item.amount || '',
+                unit: item.unit || '',
+                checked: false,
+                addedAt: new Date().toISOString()
+            };
+
+            lists[listIndex].items.push(newItem);
+            lists[listIndex].lastModified = new Date().toISOString();
+            Storage.set('chefmate_shopping_lists', lists);
+            return newItem;
+        }
+        return null;
+    },
+
+    // Toggle item checked status
+    toggleItem(listId, itemId) {
+        const lists = this.getAll();
+        const listIndex = lists.findIndex(list => list.id === listId);
+
+        if (listIndex !== -1) {
+            const itemIndex = lists[listIndex].items.findIndex(item => item.id === itemId);
+            if (itemIndex !== -1) {
+                lists[listIndex].items[itemIndex].checked = !lists[listIndex].items[itemIndex].checked;
+                lists[listIndex].lastModified = new Date().toISOString();
+                Storage.set('chefmate_shopping_lists', lists);
+                return true;
+            }
+        }
+        return false;
+    },
+
+    // Delete shopping list
+    delete(listId) {
+        const lists = this.getAll();
+        const filteredLists = lists.filter(list => list.id !== listId);
+        Storage.set('chefmate_shopping_lists', filteredLists);
+        return filteredLists.length < lists.length;
+    }
+};
+
+// ===== TIMER MANAGEMENT =====
+const Timer = {
+    // Get all timers
+    getAll() {
+        return Storage.get('chefmate_timers', []);
+    },
+
+    // Create new timer
+    create(name, durationMinutes) {
+        const timers = this.getAll();
+        const newTimer = {
+            id: Utils.generateId(),
+            name: name.trim(),
+            duration: durationMinutes * 60, // Convert to seconds
+            remaining: durationMinutes * 60,
+            status: 'ready', // ready, running, paused, completed
+            createdAt: new Date().toISOString(),
+            startedAt: null,
+            pausedAt: null
+        };
+
+        timers.push(newTimer);
+        Storage.set('chefmate_timers', timers);
+        return newTimer;
+    },
+
+    // Start timer
+    start(timerId) {
+        const timers = this.getAll();
+        const timerIndex = timers.findIndex(timer => timer.id === timerId);
+
+        if (timerIndex !== -1) {
+            timers[timerIndex].status = 'running';
+            timers[timerIndex].startedAt = new Date().toISOString();
+            Storage.set('chefmate_timers', timers);
+            return true;
+        }
+        return false;
+    },
+
+    // Pause timer
+    pause(timerId) {
+        const timers = this.getAll();
+        const timerIndex = timers.findIndex(timer => timer.id === timerId);
+
+        if (timerIndex !== -1 && timers[timerIndex].status === 'running') {
+            timers[timerIndex].status = 'paused';
+            timers[timerIndex].pausedAt = new Date().toISOString();
+            Storage.set('chefmate_timers', timers);
+            return true;
+        }
+        return false;
+    },
+
+    // Resume timer
+    resume(timerId) {
+        const timers = this.getAll();
+        const timerIndex = timers.findIndex(timer => timer.id === timerId);
+
+        if (timerIndex !== -1 && timers[timerIndex].status === 'paused') {
+            timers[timerIndex].status = 'running';
+            timers[timerIndex].pausedAt = null;
+            Storage.set('chefmate_timers', timers);
+            return true;
+        }
+        return false;
+    },
+
+    // Complete timer
+    complete(timerId) {
+        const timers = this.getAll();
+        const timerIndex = timers.findIndex(timer => timer.id === timerId);
+
+        if (timerIndex !== -1) {
+            timers[timerIndex].status = 'completed';
+            timers[timerIndex].completedAt = new Date().toISOString();
+            Storage.set('chefmate_timers', timers);
+            return true;
+        }
+        return false;
+    },
+
+    // Delete timer
+    delete(timerId) {
+        const timers = this.getAll();
+        const filteredTimers = timers.filter(timer => timer.id !== timerId);
+        Storage.set('chefmate_timers', filteredTimers);
+        return filteredTimers.length < timers.length;
+    },
+
+    // Get active timers
+    getActive() {
+        return this.getAll().filter(timer =>
+            timer.status === 'running' || timer.status === 'paused'
+        );
+    }
+};
+
 // ===== MOBILE NAVIGATION =====
 const MobileNav = {
     init() {
@@ -419,5 +596,7 @@ window.ChefMateUtils = {
     Favorites,
     IngredientHistory,
     Utils,
+    ShoppingList,
+    Timer,
     MobileNav
 };

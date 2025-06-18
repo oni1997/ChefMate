@@ -37,8 +37,6 @@ class ChefMateAPI {
 
     // ===== API KEY MANAGEMENT =====
     getApiKey(service) {
-        // For development, you can set these in localStorage
-        // In production, use environment variables or secure key management
         const keys = {
             spoonacular: localStorage.getItem('chefmate_spoonacular_key') || 'YOUR_SPOONACULAR_API_KEY',
             gemini: localStorage.getItem('chefmate_gemini_key') || 'YOUR_GEMINI_API_KEY'

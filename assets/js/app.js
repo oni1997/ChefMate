@@ -381,3 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.chefMateApp = new ChefMateApp();
     }
 });
+
+// Export for main.js compatibility
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ChefMateApp;
+}

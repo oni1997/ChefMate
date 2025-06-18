@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - ChefMate</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="ChefMate Logo" class="nav-logo">
+                    <h1 class="nav-title">ChefMate</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="search.html" class="nav-link">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="favorites.html" class="nav-link">Favorites</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="profile.html" class="nav-link active">Profile</a>
+                    </li>
+                </ul>
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Profile Header -->
+        <section class="profile-header">
+            <div class="container">
+                <div class="profile-header-content">
+                    <div class="profile-avatar">
+                        <div class="avatar-circle">
+                            <span class="avatar-text" id="avatarText">U</span>
+                        </div>
+                        <button class="avatar-edit-btn" id="editAvatarBtn">📷</button>
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name" id="profileName">Guest User</h1>
+                        <p class="profile-subtitle" id="profileSubtitle">Cooking enthusiast</p>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalRecipesTried">0</span>
+                                <span class="stat-label">Recipes Tried</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalFavorites">0</span>
+                                <span class="stat-label">Favorites</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="cookingStreak">0</span>
+                                <span class="stat-label">Day Streak</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Content -->
+        <section class="profile-content">
+            <div class="container">
+                <div class="profile-grid">
+                    <!-- Preferences Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>Cooking Preferences</h2>
+                            <button class="btn btn-secondary btn-small" id="editPreferencesBtn">Edit</button>
+                        </div>
+                        <div class="preferences-content">
+                            <div class="preference-group">
+                                <h3>Dietary Restrictions</h3>
+                                <div class="preference-tags" id="dietaryRestrictions">
+                                    <!-- Tags will be inserted here -->
+                                </div>
+                            </div>
+                            <div class="preference-group">
+                                <h3>Cuisine Preferences</h3>
+                                <div class="preference-tags" id="cuisinePreferences">
+                                    <!-- Tags will be inserted here -->
+                                </div>
+                            </div>
+                            <div class="preference-group">
+                                <h3>Skill Level</h3>
+                                <div class="skill-level" id="skillLevel">
+                                    <span class="skill-badge">Beginner</span>
+                                </div>
+                            </div>
+                            <div class="preference-group">
+                                <h3>Default Settings</h3>
+                                <div class="default-settings">
+                                    <div class="setting-item">
+                                        <span class="setting-label">Serving Size:</span>
+                                        <span class="setting-value" id="defaultServings">4 people</span>
+                                    </div>
+                                    <div class="setting-item">
+                                        <span class="setting-label">Max Cook Time:</span>
+                                        <span class="setting-value" id="maxCookTime">60 minutes</span>
+                                    </div>
+                                    <div class="setting-item">
+                                        <span class="setting-label">Units:</span>
+                                        <span class="setting-value" id="unitPreference">Metric</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>Recent Activity</h2>
+                            <button class="btn btn-secondary btn-small" id="clearActivityBtn">Clear</button>
+                        </div>
+                        <div class="activity-content" id="recentActivity">
+                            <!-- Activity items will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Shopping Lists Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>Shopping Lists</h2>
+                            <button class="btn btn-primary btn-small" id="createListBtn">Create New</button>
+                        </div>
+                        <div class="shopping-lists-content" id="shoppingLists">
+                            <!-- Shopping lists will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Cooking Timers Card -->
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2>Active Timers</h2>
+                            <button class="btn btn-primary btn-small" id="addTimerBtn">Add Timer</button>
+                        </div>
+                        <div class="timers-content" id="activeTimers">
+                            <!-- Active timers will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>ChefMate</h3>
+                    <p>Smart cooking made simple</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Edit Preferences Modal -->
+    <div class="modal" id="editPreferencesModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Cooking Preferences</h3>
+                <button class="modal-close" id="closePreferencesModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="preferencesForm">
+                    <div class="form-group">
+                        <label>Dietary Restrictions</label>
+                        <div class="checkbox-group" id="dietaryCheckboxes">
+                            <label><input type="checkbox" value="vegetarian"> Vegetarian</label>
+                            <label><input type="checkbox" value="vegan"> Vegan</label>
+                            <label><input type="checkbox" value="gluten-free"> Gluten-Free</label>
+                            <label><input type="checkbox" value="dairy-free"> Dairy-Free</label>
+                            <label><input type="checkbox" value="nut-free"> Nut-Free</label>
+                            <label><input type="checkbox" value="low-carb"> Low-Carb</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cuisine Preferences</label>
+                        <div class="checkbox-group" id="cuisineCheckboxes">
+                            <label><input type="checkbox" value="italian"> Italian</label>
+                            <label><input type="checkbox" value="asian"> Asian</label>
+                            <label><input type="checkbox" value="mexican"> Mexican</label>
+                            <label><input type="checkbox" value="indian"> Indian</label>
+                            <label><input type="checkbox" value="mediterranean"> Mediterranean</label>
+                            <label><input type="checkbox" value="american"> American</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillLevelSelect">Skill Level</label>
+                        <select id="skillLevelSelect" class="form-select">
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="defaultServingsInput">Default Serving Size</label>
+                        <input type="number" id="defaultServingsInput" class="form-input" min="1" max="12" value="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxCookTimeInput">Max Cook Time (minutes)</label>
+                        <input type="number" id="maxCookTimeInput" class="form-input" min="15" max="240" value="60">
+                    </div>
+                    <div class="form-group">
+                        <label for="unitsSelect">Measurement Units</label>
+                        <select id="unitsSelect" class="form-select">
+                            <option value="metric">Metric</option>
+                            <option value="imperial">Imperial</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelPreferences">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Timer Modal -->
+    <div class="modal" id="addTimerModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Cooking Timer</h3>
+                <button class="modal-close" id="closeTimerModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="timerForm">
+                    <div class="form-group">
+                        <label for="timerName">Timer Name</label>
+                        <input type="text" id="timerName" class="form-input" placeholder="e.g., Pasta cooking" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="timerMinutes">Duration (minutes)</label>
+                        <input type="number" id="timerMinutes" class="form-input" min="1" max="240" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelTimer">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Start Timer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/profile.js"></script>
+</body>
+</html>

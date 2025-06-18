@@ -332,6 +332,55 @@ const Utils = {
     // Generate unique ID
     generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substring(2);
+    },
+
+    // Calculate recipe difficulty rating
+    calculateDifficultyRating(recipe) {
+        const time = recipe.readyInMinutes || 30;
+        const ingredientCount = recipe.extendedIngredients?.length || 5;
+        const instructionCount = recipe.analyzedInstructions?.[0]?.steps?.length || 5;
+
+        let score = 0;
+
+        // Time factor (0-3 points)
+        if (time <= 15) score += 0;
+        else if (time <= 30) score += 1;
+        else if (time <= 60) score += 2;
+        else score += 3;
+
+        // Ingredient factor (0-3 points)
+        if (ingredientCount <= 5) score += 0;
+        else if (ingredientCount <= 10) score += 1;
+        else if (ingredientCount <= 15) score += 2;
+        else score += 3;
+
+        // Instruction complexity (0-2 points)
+        if (instructionCount <= 5) score += 0;
+        else if (instructionCount <= 10) score += 1;
+        else score += 2;
+
+        // Convert to difficulty level
+        if (score <= 2) return { level: 'Easy', rating: 1 };
+        if (score <= 5) return { level: 'Medium', rating: 2 };
+        return { level: 'Hard', rating: 3 };
+    },
+
+    // Format serving size for display
+    formatServingSize(servings) {
+        if (!servings) return '4 servings';
+        if (servings === 1) return '1 serving';
+        return `${servings} servings`;
+    },
+
+    // Calculate nutritional values per serving
+    calculateNutritionPerServing(nutrition, originalServings, currentServings) {
+        if (!nutrition || !originalServings || !currentServings) return nutrition;
+
+        const ratio = currentServings / originalServings;
+        return nutrition.map(nutrient => ({
+            ...nutrient,
+            amount: nutrient.amount * ratio
+        }));
     }
 };
 

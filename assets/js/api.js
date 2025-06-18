@@ -37,8 +37,8 @@ class ChefMateAPI {
     // ===== API KEY MANAGEMENT =====
     getApiKey(service) {
         const keys = {
-            spoonacular: localStorage.getItem('chefmate_spoonacular_key') || 'YOUR_SPOONACULAR_API_KEY',
-            gemini: localStorage.getItem('chefmate_gemini_key') || 'YOUR_GEMINI_API_KEY'
+            spoonacular: localStorage.getItem('chefmate_spoonacular_key') || '60807c80c43d42729bfb7a1e46038a34',
+            gemini: localStorage.getItem('chefmate_gemini_key') || 'AIzaSyBTGTEfGFQ9VjlZOpacJrTtZ2o3CgXFang'
         };
         return keys[service];
     }
@@ -175,12 +175,6 @@ class ChefMateAPI {
      * @returns {Promise} Detailed recipe information
      */
     async getRecipeInformation(recipeId) {
-        // For local development without API keys, return mock data
-        if (!this.useServerlessAPI && (!this.spoonacularApiKey || this.spoonacularApiKey === 'YOUR_SPOONACULAR_API_KEY')) {
-            console.log('Using mock recipe data for local development');
-            return this.getMockRecipeData(recipeId);
-        }
-
         let url;
 
         if (this.useServerlessAPI) {
@@ -194,12 +188,28 @@ class ChefMateAPI {
             // Use direct API call
             const params = new URLSearchParams({
                 apiKey: this.spoonacularApiKey,
-                includeNutrition: true
+                includeNutrition: true,
+                addRecipeInformation: true,
+                fillIngredients: true
             });
             url = `${this.spoonacularBaseURL}/recipes/${recipeId}/information?${params}`;
         }
 
-        return await this.makeRequest(url);
+        const recipe = await this.makeRequest(url);
+
+        // If instructions are missing, try to get them separately
+        if (!recipe.analyzedInstructions || recipe.analyzedInstructions.length === 0) {
+            try {
+                const instructions = await this.getRecipeInstructions(recipeId);
+                if (instructions && instructions.length > 0) {
+                    recipe.analyzedInstructions = instructions;
+                }
+            } catch (error) {
+                console.warn('Failed to get separate instructions:', error);
+            }
+        }
+
+        return recipe;
     }
 
     /**
@@ -217,12 +227,21 @@ class ChefMateAPI {
      * @returns {Promise} Recipe instructions
      */
     async getRecipeInstructions(recipeId) {
-        const params = new URLSearchParams({
-            apiKey: this.spoonacularApiKey
-        });
-
-        const url = `${this.spoonacularBaseURL}/recipes/${recipeId}/analyzedInstructions?${params}`;
-        return await this.makeRequest(url);
+        if (this.useServerlessAPI) {
+            // Use Vercel serverless function
+            const params = new URLSearchParams({
+                endpoint: `/recipes/${recipeId}/analyzedInstructions`
+            });
+            const url = `${this.spoonacularBaseURL}?${params}`;
+            return await this.makeRequest(url);
+        } else {
+            // Use direct API call
+            const params = new URLSearchParams({
+                apiKey: this.spoonacularApiKey
+            });
+            const url = `${this.spoonacularBaseURL}/recipes/${recipeId}/analyzedInstructions?${params}`;
+            return await this.makeRequest(url);
+        }
     }
 
     /**
@@ -295,10 +314,6 @@ class ChefMateAPI {
                 return response;
             } else {
                 // Use direct API call
-                if (!this.geminiApiKey || this.geminiApiKey === 'YOUR_GEMINI_API_KEY') {
-                    return this.getMockAITips(recipe);
-                }
-
                 const response = await this.callGeminiAPI(prompt);
                 return this.parseAIResponse(response);
             }
@@ -416,98 +431,7 @@ Keep tips practical, concise, and beginner-friendly. Format as a JSON object wit
         return { tips: mockTips.slice(0, 4) };
     }
 
-    /**
-     * Get mock recipe data for local development
-     * @param {number} recipeId - Recipe ID
-     * @returns {Object} Mock recipe data
-     */
-    getMockRecipeData(recipeId) {
-        return {
-            id: recipeId,
-            title: "Mock Recipe - Delicious Chicken Stir Fry",
-            image: "https://via.placeholder.com/556x370/FF6B6B/FFFFFF?text=Mock+Recipe",
-            readyInMinutes: 25,
-            servings: 4,
-            vegetarian: false,
-            vegan: false,
-            glutenFree: false,
-            dairyFree: false,
-            summary: "This is a mock recipe for local development. It demonstrates how the recipe page would look with real data from the Spoonacular API.",
-            extendedIngredients: [
-                {
-                    id: 1,
-                    name: "chicken breast",
-                    amount: 1,
-                    unit: "lb",
-                    original: "1 lb chicken breast, sliced"
-                },
-                {
-                    id: 2,
-                    name: "bell peppers",
-                    amount: 2,
-                    unit: "pieces",
-                    original: "2 bell peppers, sliced"
-                },
-                {
-                    id: 3,
-                    name: "soy sauce",
-                    amount: 3,
-                    unit: "tablespoons",
-                    original: "3 tablespoons soy sauce"
-                },
-                {
-                    id: 4,
-                    name: "garlic",
-                    amount: 3,
-                    unit: "cloves",
-                    original: "3 cloves garlic, minced"
-                },
-                {
-                    id: 5,
-                    name: "vegetable oil",
-                    amount: 2,
-                    unit: "tablespoons",
-                    original: "2 tablespoons vegetable oil"
-                }
-            ],
-            analyzedInstructions: [{
-                steps: [
-                    {
-                        number: 1,
-                        step: "Heat oil in a large skillet or wok over medium-high heat.",
-                        length: { number: 2, unit: "minutes" }
-                    },
-                    {
-                        number: 2,
-                        step: "Add chicken to the skillet and cook until golden brown and cooked through, about 6-8 minutes.",
-                        length: { number: 8, unit: "minutes" }
-                    },
-                    {
-                        number: 3,
-                        step: "Add bell peppers and garlic to the skillet and stir-fry for 3-4 minutes until peppers are tender-crisp."
-                    },
-                    {
-                        number: 4,
-                        step: "Pour soy sauce over the mixture and toss to combine. Cook for another 1-2 minutes."
-                    },
-                    {
-                        number: 5,
-                        step: "Serve immediately over rice or noodles. Enjoy your delicious stir fry!"
-                    }
-                ]
-            }],
-            nutrition: {
-                nutrients: [
-                    { name: "Calories", amount: 285, unit: "kcal" },
-                    { name: "Protein", amount: 32, unit: "g" },
-                    { name: "Carbohydrates", amount: 8, unit: "g" },
-                    { name: "Fat", amount: 14, unit: "g" },
-                    { name: "Fiber", amount: 2, unit: "g" },
-                    { name: "Sugar", amount: 5, unit: "g" }
-                ]
-            }
-        };
-    }
+
 
     // ===== ERROR HANDLING =====
     handleAPIError(error, context = '') {

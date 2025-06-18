@@ -137,7 +137,11 @@ class ChefMateRecipe {
 
     // ===== RECIPE DISPLAY =====
     displayRecipe() {
-        if (!this.recipe) return;
+        console.log('displayRecipe called with recipe:', this.recipe);
+        if (!this.recipe) {
+            console.error('No recipe data to display!');
+            return;
+        }
 
         // Basic info with null checks
         const recipeTitle = document.getElementById('recipeTitle');
@@ -167,43 +171,107 @@ class ChefMateRecipe {
         // Display nutrition info
         this.displayNutritionInfo();
 
+        // Display recipe summary if available
+        this.displaySummary();
+
         // Show recipe content
         this.showRecipe();
     }
 
     displayIngredients() {
+        console.log('displayIngredients called');
         const container = document.getElementById('ingredientsList');
-        if (!container || !this.recipe.extendedIngredients) return;
+        console.log('ingredientsList container:', container);
+        console.log('recipe.extendedIngredients:', this.recipe.extendedIngredients);
+
+        if (!container) {
+            console.error('ingredientsList container not found!');
+            return;
+        }
+
+        if (!this.recipe.extendedIngredients) {
+            console.error('No extendedIngredients in recipe!');
+            return;
+        }
 
         container.innerHTML = this.recipe.extendedIngredients.map(ingredient => {
-            const adjustedAmount = this.adjustIngredientAmount(ingredient.amount);
+            // Use the original text if available, otherwise construct from parts
+            let displayText = ingredient.original;
+
+            if (!displayText) {
+                const adjustedAmount = this.adjustIngredientAmount(ingredient.amount);
+                const unit = ingredient.unit || '';
+                const name = ingredient.name || ingredient.nameClean || '';
+                displayText = `${adjustedAmount} ${unit} ${name}`.trim();
+            }
+
             return `
                 <div class="ingredient-item">
-                    <div class="ingredient-amount">${adjustedAmount} ${ingredient.unit}</div>
-                    <div class="ingredient-name">${ingredient.name}</div>
+                    <div class="ingredient-content">
+                        <span class="ingredient-text">${displayText}</span>
+                    </div>
+                    <button class="ingredient-check-btn" onclick="window.chefMateRecipe.toggleIngredient('${ingredient.id}')">
+                        <span class="checkmark">✓</span>
+                    </button>
                 </div>
             `;
         }).join('');
     }
 
     displayInstructions() {
+        console.log('displayInstructions called');
         const container = document.getElementById('instructionsList');
-        if (!container || !this.recipe.analyzedInstructions?.[0]?.steps) return;
+        console.log('instructionsList container:', container);
+        console.log('recipe.analyzedInstructions:', this.recipe.analyzedInstructions);
+        console.log('recipe.instructions:', this.recipe.instructions);
 
-        const steps = this.recipe.analyzedInstructions[0].steps;
-        container.innerHTML = steps.map((step, index) => `
-            <div class="instruction-step" data-step="${index}">
-                <div class="step-number">${step.number}</div>
-                <div class="step-content">
-                    <p>${step.step}</p>
-                    ${step.length ? `<div class="step-timer">
-                        <button class="btn btn-small btn-secondary" onclick="window.chefMateRecipe.showTimerModal(${step.length.number})">
-                            Timer: ${step.length.number} ${step.length.unit}
-                        </button>
-                    </div>` : ''}
+        if (!container) {
+            console.error('instructionsList container not found!');
+            return;
+        }
+
+        let instructionsHTML = '';
+
+        // Check for structured instructions first
+        if (this.recipe.analyzedInstructions?.[0]?.steps?.length > 0) {
+            const steps = this.recipe.analyzedInstructions[0].steps;
+            instructionsHTML = steps.map((step, index) => `
+                <div class="instruction-step" data-step="${index}">
+                    <div class="step-number">${step.number}</div>
+                    <div class="step-content">
+                        <p>${step.step}</p>
+                        ${step.length ? `<div class="step-timer">
+                            <button class="btn btn-small btn-secondary" onclick="window.chefMateRecipe.showTimerModal(${step.length.number})">
+                                Timer: ${step.length.number} ${step.length.unit}
+                            </button>
+                        </div>` : ''}
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `).join('');
+        }
+        // Fall back to plain text instructions
+        else if (this.recipe.instructions) {
+            // Split by periods or line breaks to create steps
+            const textSteps = this.recipe.instructions
+                .split(/\.\s+|\n/)
+                .filter(step => step.trim().length > 10)
+                .map(step => step.trim());
+
+            instructionsHTML = textSteps.map((step, index) => `
+                <div class="instruction-step" data-step="${index}">
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <p>${step}${step.endsWith('.') ? '' : '.'}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        // No instructions available
+        else {
+            instructionsHTML = '<div class="empty-state">No instructions available for this recipe.</div>';
+        }
+
+        container.innerHTML = instructionsHTML;
     }
 
     displayNutritionInfo() {
@@ -225,6 +293,46 @@ class ChefMateRecipe {
                 </div>
             `;
         }).filter(item => item).join('');
+    }
+
+    displaySummary() {
+        const container = document.getElementById('recipeSummary');
+        if (!container) return;
+
+        if (this.recipe.summary) {
+            // Remove HTML tags from summary
+            const cleanSummary = this.recipe.summary.replace(/<[^>]*>/g, '');
+            container.innerHTML = `<p class="recipe-summary-text">${cleanSummary}</p>`;
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
+
+    toggleIngredient(ingredientId) {
+        const ingredientElement = document.querySelector(`[onclick*="${ingredientId}"]`);
+        if (ingredientElement) {
+            const item = ingredientElement.closest('.ingredient-item');
+            item.classList.toggle('checked');
+
+            // Store checked state
+            const checkedIngredients = JSON.parse(localStorage.getItem('chefmate_checked_ingredients') || '{}');
+            const recipeKey = `recipe_${this.recipe.id}`;
+
+            if (!checkedIngredients[recipeKey]) {
+                checkedIngredients[recipeKey] = [];
+            }
+
+            if (item.classList.contains('checked')) {
+                if (!checkedIngredients[recipeKey].includes(ingredientId)) {
+                    checkedIngredients[recipeKey].push(ingredientId);
+                }
+            } else {
+                checkedIngredients[recipeKey] = checkedIngredients[recipeKey].filter(id => id !== ingredientId);
+            }
+
+            localStorage.setItem('chefmate_checked_ingredients', JSON.stringify(checkedIngredients));
+        }
     }
 
     // ===== SERVING SIZE ADJUSTMENT =====
@@ -574,13 +682,27 @@ class ChefMateRecipe {
     }
 
     showRecipe() {
+        console.log('showRecipe called');
         const loadingState = document.getElementById('loadingState');
         const recipeContent = document.getElementById('recipeContent');
         const errorState = document.getElementById('errorState');
 
-        if (loadingState) loadingState.style.display = 'none';
-        if (recipeContent) recipeContent.style.display = 'block';
-        if (errorState) errorState.style.display = 'none';
+        console.log('loadingState element:', loadingState);
+        console.log('recipeContent element:', recipeContent);
+        console.log('errorState element:', errorState);
+
+        if (loadingState) {
+            loadingState.style.display = 'none';
+            console.log('Hidden loading state');
+        }
+        if (recipeContent) {
+            recipeContent.style.display = 'block';
+            console.log('Showed recipe content');
+        }
+        if (errorState) {
+            errorState.style.display = 'none';
+            console.log('Hidden error state');
+        }
     }
 }
 

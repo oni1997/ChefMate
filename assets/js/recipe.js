@@ -113,13 +113,21 @@ class ChefMateRecipe {
     displayRecipe() {
         if (!this.recipe) return;
 
-        // Basic info
-        document.getElementById('recipeTitle').textContent = this.recipe.title;
-        document.getElementById('recipeImage').src = this.recipe.image;
-        document.getElementById('recipeImage').alt = this.recipe.title;
-        document.getElementById('cookTime').textContent = this.utils.Utils.formatCookTime(this.recipe.readyInMinutes);
-        document.getElementById('servings').textContent = this.currentServings;
-        document.getElementById('difficulty').textContent = this.calculateDifficulty();
+        // Basic info with null checks
+        const recipeTitle = document.getElementById('recipeTitle');
+        const recipeImage = document.getElementById('recipeImage');
+        const cookTime = document.getElementById('cookTime');
+        const servings = document.getElementById('servings');
+        const difficulty = document.getElementById('difficulty');
+
+        if (recipeTitle) recipeTitle.textContent = this.recipe.title;
+        if (recipeImage) {
+            recipeImage.src = this.recipe.image;
+            recipeImage.alt = this.recipe.title;
+        }
+        if (cookTime) cookTime.textContent = this.utils.Utils.formatCookTime(this.recipe.readyInMinutes);
+        if (servings) servings.textContent = this.currentServings;
+        if (difficulty) difficulty.textContent = this.calculateDifficulty();
 
         // Update favorite button
         this.updateFavoriteButton();
@@ -134,8 +142,7 @@ class ChefMateRecipe {
         this.displayNutritionInfo();
 
         // Show recipe content
-        document.getElementById('recipeContent').style.display = 'block';
-        document.getElementById('loadingState').style.display = 'none';
+        this.showRecipe();
     }
 
     displayIngredients() {
@@ -199,7 +206,10 @@ class ChefMateRecipe {
         const newServings = Math.max(1, Math.min(12, this.currentServings + change));
         if (newServings !== this.currentServings) {
             this.currentServings = newServings;
-            document.getElementById('servings').textContent = this.currentServings;
+            const servingsElement = document.getElementById('servings');
+            if (servingsElement) {
+                servingsElement.textContent = this.currentServings;
+            }
             this.displayIngredients();
             this.displayNutritionInfo();
         }
@@ -518,15 +528,33 @@ class ChefMateRecipe {
     }
 
     showLoading() {
-        document.getElementById('loadingState').style.display = 'block';
-        document.getElementById('recipeContent').style.display = 'none';
-        document.getElementById('errorState').style.display = 'none';
+        const loadingState = document.getElementById('loadingState');
+        const recipeContent = document.getElementById('recipeContent');
+        const errorState = document.getElementById('errorState');
+
+        if (loadingState) loadingState.style.display = 'block';
+        if (recipeContent) recipeContent.style.display = 'none';
+        if (errorState) errorState.style.display = 'none';
     }
 
     showError() {
-        document.getElementById('loadingState').style.display = 'none';
-        document.getElementById('recipeContent').style.display = 'none';
-        document.getElementById('errorState').style.display = 'block';
+        const loadingState = document.getElementById('loadingState');
+        const recipeContent = document.getElementById('recipeContent');
+        const errorState = document.getElementById('errorState');
+
+        if (loadingState) loadingState.style.display = 'none';
+        if (recipeContent) recipeContent.style.display = 'none';
+        if (errorState) errorState.style.display = 'block';
+    }
+
+    showRecipe() {
+        const loadingState = document.getElementById('loadingState');
+        const recipeContent = document.getElementById('recipeContent');
+        const errorState = document.getElementById('errorState');
+
+        if (loadingState) loadingState.style.display = 'none';
+        if (recipeContent) recipeContent.style.display = 'block';
+        if (errorState) errorState.style.display = 'none';
     }
 }
 

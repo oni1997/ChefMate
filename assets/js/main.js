@@ -151,13 +151,20 @@ class ChefMateMain {
         // Handle errors globally
         window.addEventListener('error', (e) => {
             console.error('Global error:', e.error);
-            this.showNotification('An error occurred. Please try again.', 'error');
+            // Only show notification for non-extension related errors
+            if (!e.filename?.includes('chrome-extension://')) {
+                this.showNotification('An error occurred. Please try again.', 'error');
+            }
         });
 
         // Handle unhandled promise rejections
         window.addEventListener('unhandledrejection', (e) => {
             console.error('Unhandled promise rejection:', e.reason);
-            this.showNotification('Something went wrong. Please refresh the page.', 'error');
+            // Only show notification for non-extension related errors
+            if (!e.reason?.message?.includes('chrome-extension') &&
+                !e.reason?.stack?.includes('chrome-extension')) {
+                this.showNotification('Something went wrong. Please refresh the page.', 'error');
+            }
         });
 
         // Handle online/offline status

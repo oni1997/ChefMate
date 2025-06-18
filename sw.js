@@ -67,6 +67,13 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // Skip chrome-extension and other unsupported schemes
+    if (event.request.url.startsWith('chrome-extension://') ||
+        event.request.url.startsWith('moz-extension://') ||
+        event.request.url.startsWith('safari-extension://')) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
@@ -89,6 +96,10 @@ self.addEventListener('fetch', (event) => {
                         caches.open(CACHE_NAME)
                             .then((cache) => {
                                 cache.put(event.request, responseToCache);
+                            })
+                            .catch((error) => {
+                                // Silently ignore cache errors for unsupported schemes
+                                console.debug('Cache put failed:', error.message);
                             });
 
                         return response;

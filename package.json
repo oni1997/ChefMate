@@ -4,7 +4,8 @@
   "description": "Smart recipe generator that helps users discover recipes using ingredients they own, with AI guidance for better cooking results.",
   "main": "index.html",
   "scripts": {
-    "dev": "python3 -m http.server 8000",
+    "dev": "node dev-server.js",
+    "dev:simple": "python3 -m http.server 8000",
     "build": "echo 'Static site - no build needed'",
     "start": "python3 -m http.server 8000"
   },
@@ -25,5 +26,8 @@
   "homepage": "https://chefmate.vercel.app",
   "engines": {
     "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
   }
 }

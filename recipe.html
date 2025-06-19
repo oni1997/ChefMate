@@ -52,69 +52,187 @@
 
         <!-- Recipe Content -->
         <div class="recipe-container" id="recipeContainer" style="display: none;">
-            <!-- Recipe Header -->
-            <section class="recipe-header">
+            <!-- Recipe Hero Section -->
+            <section class="recipe-hero">
+                <div class="recipe-hero-background">
+                    <img src="" alt="" class="recipe-hero-bg" id="recipeImageBg">
+                    <div class="hero-overlay"></div>
+                </div>
+
                 <div class="container">
-                    <div class="recipe-header-content">
-                        <div class="recipe-image-section">
-                            <img src="" alt="" class="recipe-hero-image" id="recipeImage">
-                            <div class="recipe-overlay">
-                                <button class="favorite-btn-large" id="favoriteBtn" aria-label="Add to favorites">
-                                    <span class="heart-icon">♡</span>
-                                </button>
+                    <div class="recipe-hero-content">
+                        <div class="breadcrumb">
+                            <a href="search.html" class="breadcrumb-link">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                                </svg>
+                                Back to Search
+                            </a>
+                        </div>
+
+                        <div class="recipe-hero-main">
+                            <div class="recipe-image-container">
+                                <img src="" alt="" class="recipe-hero-image" id="recipeImage">
+                                <div class="image-actions">
+                                    <button class="favorite-btn-enhanced" id="favoriteBtn" aria-label="Add to favorites">
+                                        <div class="favorite-icon">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                            </svg>
+                                        </div>
+                                        <span class="favorite-text">Add to Favorites</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="recipe-info">
+                                <div class="recipe-badges" id="recipeBadges">
+                                    <!-- Diet badges will be inserted here -->
+                                </div>
+
+                                <h1 class="recipe-title" id="recipeTitle"></h1>
+
+                                <div class="recipe-rating" id="recipeRating">
+                                    <div class="stars" id="starsContainer">
+                                        <!-- Stars will be inserted here -->
+                                    </div>
+                                    <span class="rating-text" id="ratingText"></span>
+                                </div>
+
+                                <p class="recipe-summary" id="recipeSummary"></p>
+
+                                <div class="recipe-quick-actions">
+                                    <button class="quick-action-btn primary enhanced" id="startCookingBtn">
+                                        <div class="btn-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="btn-content">
+                                            <span class="btn-title">Start Cooking</span>
+                                            <span class="btn-subtitle">Step-by-step mode</span>
+                                        </div>
+                                    </button>
+                                    <button class="quick-action-btn secondary enhanced" id="addToShoppingListBtn">
+                                        <div class="btn-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M9 11H5a2 2 0 0 0-2 2v3c0 5 2 7 9 7s9-2 9-7v-3a2 2 0 0 0-2-2h-4"/>
+                                                <polyline points="9,11 12,14 22,4"/>
+                                            </svg>
+                                        </div>
+                                        <div class="btn-content">
+                                            <span class="btn-title">Shopping List</span>
+                                            <span class="btn-subtitle">Add ingredients</span>
+                                        </div>
+                                    </button>
+                                    <button class="quick-action-btn ai enhanced" id="getAiTipsBtn">
+                                        <div class="btn-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="btn-content">
+                                            <span class="btn-title">AI Chef</span>
+                                            <span class="btn-subtitle">Get cooking tips</span>
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="recipe-info-section">
-                            <div class="breadcrumb">
-                                <a href="search.html" class="breadcrumb-link">← Back to Results</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Tips Section -->
+            <section class="ai-tips-section" id="aiTipsSection" style="display: none;">
+                <div class="container">
+                    <div class="ai-tips-card">
+                        <div class="ai-tips-header">
+                            <div class="ai-avatar">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
                             </div>
-                            
-                            <h1 class="recipe-title" id="recipeTitle"></h1>
-                            
-                            <div class="recipe-meta-grid">
-                                <div class="meta-item">
-                                    <span class="meta-icon">⏱️</span>
-                                    <div class="meta-content">
-                                        <span class="meta-label">Cook Time</span>
-                                        <span class="meta-value" id="cookTime"></span>
-                                    </div>
+                            <div class="ai-title">
+                                <h3>🤖 AI Cooking Coach</h3>
+                                <p>Personalized cooking tips for this recipe</p>
+                            </div>
+                            <button class="ai-close-btn" onclick="document.getElementById('aiTipsSection').style.display='none'">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="ai-tips-content" id="aiTipsContent">
+                            <div class="ai-placeholder">
+                                <div class="ai-placeholder-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" opacity="0.3">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="meta-item">
-                                    <span class="meta-icon">👥</span>
-                                    <div class="meta-content">
-                                        <span class="meta-label">Servings</span>
-                                        <div class="serving-controls">
-                                            <button class="serving-btn" id="decreaseServing">-</button>
-                                            <span class="meta-value" id="servings">4</span>
-                                            <button class="serving-btn" id="increaseServing">+</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="meta-item">
-                                    <span class="meta-icon">📊</span>
-                                    <div class="meta-content">
-                                        <span class="meta-label">Difficulty</span>
-                                        <span class="meta-value" id="difficulty"></span>
-                                    </div>
-                                </div>
-                                
-                                <div class="meta-item">
-                                    <span class="meta-icon">⭐</span>
-                                    <div class="meta-content">
-                                        <span class="meta-label">Rating</span>
-                                        <span class="meta-value" id="rating"></span>
-                                    </div>
+                                <p>Ask me for cooking tips, substitutions, or technique advice for this recipe!</p>
+                                <button class="btn btn-primary btn-small" id="askAiBtn">Ask AI Coach</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipe Stats Bar -->
+            <section class="recipe-stats">
+                <div class="container">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Prep Time</span>
+                                <span class="stat-value" id="prepTime">-</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Cook Time</span>
+                                <span class="stat-value" id="cookTime">-</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2c0 .88-.55 1.63-1.34 1.91C18.35 6.28 18 6.61 18 7v1h-4V7c0-.39-.35-.72-.66-1.09C12.55 5.63 12 4.88 12 4c0-1.11.89-2 2-2s2 .89 2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Servings</span>
+                                <div class="serving-controls">
+                                    <button class="serving-btn" id="decreaseServing">-</button>
+                                    <span class="stat-value" id="servings">4</span>
+                                    <button class="serving-btn" id="increaseServing">+</button>
                                 </div>
                             </div>
-                            
-                            <div class="recipe-badges" id="recipeBadges">
-                                <!-- Diet badges will be inserted here -->
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                                </svg>
                             </div>
-                            
-                            <p class="recipe-summary" id="recipeSummary"></p>
+                            <div class="stat-content">
+                                <span class="stat-label">Difficulty</span>
+                                <span class="stat-value" id="difficulty">-</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,51 +241,135 @@
             <!-- Recipe Content Grid -->
             <section class="recipe-content-section" id="recipeContent">
                 <div class="container">
-                    <div class="recipe-grid">
+                    <div class="recipe-content-grid">
                         <!-- Ingredients Column -->
                         <div class="ingredients-column">
-                            <div class="ingredients-card">
+                            <div class="content-card ingredients-card">
                                 <div class="card-header">
-                                    <h2>Ingredients</h2>
-                                    <button class="btn btn-secondary btn-small" id="addToShoppingList">
-                                        Add to Shopping List
-                                    </button>
+                                    <div class="card-title">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="card-icon">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <h2>Ingredients</h2>
+                                    </div>
+                                    <div class="card-actions">
+                                        <button class="card-action-btn" id="scaleRecipeBtn" title="Scale recipe">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 3h18v18H3zM9 9h6v6H9z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="card-action-btn" id="addToShoppingListBtn" title="Add to shopping list">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M9 11H5a2 2 0 0 0-2 2v3c0 5 2 7 9 7s9-2 9-7v-3a2 2 0 0 0-2-2h-4"/>
+                                                <polyline points="9,11 12,14 22,4"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                                
-                                <div class="ingredients-list" id="ingredientsList">
-                                    <!-- Ingredients will be inserted here -->
-                                </div>
-                                
-                                <div class="missing-ingredients" id="missingIngredients" style="display: none;">
-                                    <h3>Missing Ingredients</h3>
-                                    <ul id="missingList"></ul>
-                                    <button class="btn btn-primary btn-small" id="generateShoppingList">
-                                        Generate Shopping List
-                                    </button>
+
+                                <div class="card-content">
+                                    <div class="ingredients-list" id="ingredientsList">
+                                        <!-- Ingredients will be inserted here -->
+                                    </div>
+
+                                    <div class="missing-ingredients" id="missingIngredients" style="display: none;">
+                                        <div class="missing-header">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                            </svg>
+                                            <h4>Missing Ingredients</h4>
+                                        </div>
+                                        <ul id="missingList"></ul>
+                                        <button class="btn btn-primary btn-small" id="generateShoppingList">
+                                            Generate Shopping List
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Nutrition Info -->
-                            <div class="nutrition-card">
-                                <h3>Nutrition Information</h3>
-                                <div class="nutrition-grid" id="nutritionInfo">
-                                    <!-- Nutrition data will be inserted here -->
+                            <!-- Nutrition Card -->
+                            <div class="content-card nutrition-card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="card-icon">
+                                            <path d="M9 11H5a2 2 0 0 0-2 2v3c0 5 2 7 9 7s9-2 9-7v-3a2 2 0 0 0-2-2h-4"/>
+                                        </svg>
+                                        <h3>Nutrition Facts</h3>
+                                    </div>
+                                    <button class="card-action-btn" id="nutritionDetailsBtn" title="View detailed nutrition">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="card-content">
+                                    <div class="nutrition-content" id="nutritionInfo">
+                                        <!-- Nutrition data will be inserted here -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Instructions Column -->
                         <div class="instructions-column">
-                            <div class="instructions-card">
+                            <div class="content-card instructions-card">
                                 <div class="card-header">
-                                    <h2>Instructions</h2>
-                                    <button class="btn btn-primary btn-small" id="startCookingBtn">
-                                        Start Cooking Mode
-                                    </button>
+                                    <div class="card-title">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="card-icon">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <polyline points="14,2 14,8 20,8"/>
+                                            <line x1="16" y1="13" x2="8" y2="13"/>
+                                            <line x1="16" y1="17" x2="8" y2="17"/>
+                                            <polyline points="10,9 9,9 8,9"/>
+                                        </svg>
+                                        <h2>Instructions</h2>
+                                    </div>
+                                    <div class="card-actions">
+                                        <button class="card-action-btn" id="timerBtn" title="Set timer">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <polyline points="12,6 12,12 16,14"/>
+                                            </svg>
+                                        </button>
+                                        <button class="card-action-btn primary" id="cookingModeBtn" title="Start cooking mode">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                                
-                                <div class="instructions-list" id="instructionsList">
-                                    <!-- Instructions will be inserted here -->
+
+                                <div class="card-content">
+                                    <div class="cooking-mode-toggle" id="cookingModeToggle" style="display: none;">
+                                        <div class="cooking-progress">
+                                            <div class="progress-info">
+                                                <span>Step <span id="currentStep">1</span> of <span id="totalSteps">0</span></span>
+                                                <span class="progress-percent" id="progressPercent">0%</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="progressFill"></div>
+                                            </div>
+                                        </div>
+                                        <div class="cooking-controls">
+                                            <button class="control-btn" id="prevStepBtn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                                                </svg>
+                                                Previous
+                                            </button>
+                                            <button class="control-btn primary" id="nextStepBtn">
+                                                Next
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L15.17 13H4v-2z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="instructions-list" id="instructionsList">
+                                        <!-- Instructions will be inserted here -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -175,20 +377,73 @@
                 </div>
             </section>
 
-            <!-- AI Cooking Coach -->
-            <section class="ai-coach-section" id="aiCoachSection">
+            <!-- AI Cooking Coach & Additional Features -->
+            <section class="recipe-extras">
                 <div class="container">
-                    <div class="ai-coach-card">
-                        <div class="ai-header">
-                            <div class="ai-icon">🤖</div>
-                            <h3>AI Cooking Coach</h3>
-                            <button class="btn btn-secondary btn-small" id="getAiTips">
-                                Get Cooking Tips
-                            </button>
+                    <div class="extras-grid">
+                        <!-- AI Cooking Coach - Moved to Hero Section -->
+
+                        <!-- Recipe Tools -->
+                        <div class="content-card tools-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="card-icon">
+                                        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                                    </svg>
+                                    <div>
+                                        <h3>Recipe Tools</h3>
+                                        <p class="card-subtitle">Helpful cooking utilities</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-content">
+                                <div class="tools-grid">
+                                    <button class="tool-btn" id="timerToolBtn">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12,6 12,12 16,14"/>
+                                        </svg>
+                                        <span>Kitchen Timer</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="ai-content" id="aiTipsContent">
-                            <p>Click "Get Cooking Tips" to receive personalized advice for this recipe!</p>
+
+                        <!-- Recipe Notes -->
+                        <div class="content-card notes-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="card-icon">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14,2 14,8 20,8"/>
+                                    </svg>
+                                    <div>
+                                        <h3>My Notes</h3>
+                                        <p class="card-subtitle">Personal cooking notes</p>
+                                    </div>
+                                </div>
+                                <button class="card-action-btn" id="saveNotesBtn" title="Save notes">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                        <polyline points="17,21 17,13 7,13 7,21"/>
+                                        <polyline points="7,3 7,8 15,8"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="card-content">
+                                <textarea
+                                    class="notes-textarea"
+                                    id="recipeNotes"
+                                    placeholder="Add your personal notes, modifications, or tips for this recipe..."
+                                    rows="4"
+                                ></textarea>
+                                <div class="notes-actions">
+                                    <button class="btn btn-secondary btn-small" id="clearNotesBtn">Clear</button>
+                                    <button class="btn btn-primary btn-small" id="saveNotesActionBtn">Save Notes</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -226,7 +481,85 @@
             <div class="error-icon">⚠️</div>
             <h3>Recipe Not Found</h3>
             <p>We couldn't load this recipe. It might have been removed or the link is incorrect.</p>
-            <a href="search.html" class="btn btn-primary">Back to Search</a>
+            <div class="error-actions">
+                <button class="btn btn-primary" id="searchWithAI">🤖 Find Similar Recipe with AI</button>
+                <a href="search.html" class="btn btn-secondary">Back to Search</a>
+            </div>
+        </div>
+
+        <!-- AI Recipe Search State -->
+        <div class="ai-search-state" id="aiSearchState" style="display: none;">
+            <div class="ai-search-container">
+                <div class="ai-search-header">
+                    <div class="ai-icon">🤖</div>
+                    <h3>AI Recipe Assistant</h3>
+                    <p>Let me help you find a similar recipe and provide step-by-step instructions!</p>
+                </div>
+
+                <!-- AI Search Loading -->
+                <div class="ai-search-loading" id="aiSearchLoading">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <p>Searching for similar recipes and generating instructions...</p>
+                </div>
+
+                <!-- AI Search Results -->
+                <div class="ai-search-results" id="aiSearchResults" style="display: none;">
+                    <div class="ai-recipe-content">
+                        <div class="ai-recipe-header">
+                            <h2 id="aiRecipeTitle"></h2>
+                            <div class="ai-recipe-meta">
+                                <span class="ai-badge">AI Generated</span>
+                                <span class="ai-source" id="aiRecipeSource"></span>
+                            </div>
+                        </div>
+
+                        <div class="ai-recipe-grid">
+                            <!-- AI Ingredients -->
+                            <div class="ai-ingredients-section">
+                                <h3>Ingredients</h3>
+                                <div class="ai-ingredients-list" id="aiIngredientsList">
+                                    <!-- AI ingredients will be inserted here -->
+                                </div>
+                            </div>
+
+                            <!-- AI Instructions -->
+                            <div class="ai-instructions-section">
+                                <h3>Step-by-Step Instructions</h3>
+                                <div class="ai-instructions-list" id="aiInstructionsList">
+                                    <!-- AI instructions will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-recipe-footer">
+                            <div class="ai-tips" id="aiTips">
+                                <h4>💡 Cooking Tips</h4>
+                                <div class="ai-tips-list" id="aiTipsList">
+                                    <!-- AI tips will be inserted here -->
+                                </div>
+                            </div>
+
+                            <div class="ai-actions">
+                                <button class="btn btn-primary" id="tryAnotherRecipe">Try Another Recipe</button>
+                                <a href="search.html" class="btn btn-secondary">Back to Search</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Search Error -->
+                <div class="ai-search-error" id="aiSearchError" style="display: none;">
+                    <div class="error-icon">😔</div>
+                    <h4>Couldn't Generate Recipe</h4>
+                    <p>I'm having trouble generating a recipe right now. Please try again or search manually.</p>
+                    <div class="error-actions">
+                        <button class="btn btn-primary" id="retryAISearch">Try Again</button>
+                        <a href="search.html" class="btn btn-secondary">Back to Search</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -250,6 +583,7 @@
 
     <!-- Scripts -->
     <script src="assets/js/utils.js"></script>
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/api.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/recipe.js"></script>

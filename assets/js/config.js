@@ -10,38 +10,61 @@ class ChefMateConfig {
     }
 
     /**
-     * Detect if we're running in production (Vercel) or local development
-     * @returns {boolean} True if production environment
+     * Detect if we're running with serverless functions (production or local with .env)
+     * @returns {boolean} True if should use serverless functions
      */
     detectEnvironment() {
+        // Always try serverless functions first - they work both in production and locally with .env
+        // The API class will handle the fallback to direct calls if serverless functions don't work
+
         // Check for Vercel deployment
-        if (window.location.hostname.includes('vercel.app')) {
+        if (window.location.hostname.includes('vercel.app') ||
+            window.location.hostname.includes('vercel.com')) {
             return true;
         }
-        
-        // Check for other production indicators
-        if (window.location.protocol === 'https:' && 
+
+        // Check for custom domains that might be using Vercel
+        if (window.location.protocol === 'https:' &&
             !window.location.hostname.includes('localhost') &&
-            !window.location.hostname.includes('127.0.0.1')) {
+            !window.location.hostname.includes('127.0.0.1') &&
+            !window.location.hostname.includes('192.168.') &&
+            !window.location.hostname.includes('10.0.') &&
+            window.location.port === '') {
             return true;
         }
-        
-        return false;
+
+        // For local development, assume serverless functions are available
+        // The API will gracefully fall back to direct calls if they're not
+        return true;
     }
 
     /**
-     * Check if API keys are properly configured for local development
+     * Check if API keys are properly configured
      * @returns {Object} Configuration status
      */
-    checkConfiguration() {
-        if (this.isProduction) {
-            return {
-                ready: true,
-                environment: 'production',
-                message: 'Running in production mode with serverless functions'
-            };
+    async checkConfiguration() {
+        // Always assume serverless functions are available initially
+        // The API class will handle fallback if they're not
+
+        // Test if serverless functions work
+        try {
+            const testResponse = await fetch('/api/spoonacular?endpoint=/recipes/random&number=1', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (testResponse.ok || testResponse.status !== 404) {
+                return {
+                    ready: true,
+                    environment: 'serverless',
+                    message: 'Using serverless functions (production or local with .env)'
+                };
+            }
+        } catch (error) {
+            // Serverless functions not available, continue to check local setup
         }
 
+        // Serverless functions not available, check local API key setup
         const hasSpoonacular = this.hasApiKey('spoonacular');
         const hasGemini = this.hasApiKey('gemini');
 
@@ -49,7 +72,7 @@ class ChefMateConfig {
             return {
                 ready: false,
                 environment: 'development',
-                message: 'API keys required for local development',
+                message: 'API keys required for local development without .env file',
                 missingKeys: ['spoonacular'],
                 setupUrl: 'setup.html'
             };
@@ -58,7 +81,7 @@ class ChefMateConfig {
         return {
             ready: true,
             environment: 'development',
-            message: 'Local development configured',
+            message: 'Local development configured with localStorage keys',
             hasGemini: hasGemini
         };
     }
@@ -124,9 +147,9 @@ class ChefMateConfig {
     /**
      * Show setup notification if configuration is required
      */
-    showSetupNotification() {
-        const config = this.checkConfiguration();
-        
+    async showSetupNotification() {
+        const config = await this.checkConfiguration();
+
         if (!config.ready && config.setupUrl) {
             this.createSetupBanner(config);
         }
@@ -214,9 +237,9 @@ class ChefMateConfig {
     /**
      * Initialize configuration check on page load
      */
-    init() {
-        // Show setup notification if needed
-        this.showSetupNotification();
+    async init() {
+        // Show setup notification if needed (after testing serverless functions)
+        await this.showSetupNotification();
 
         // Add setup link to navigation if in development mode
         if (!this.isProduction) {
@@ -264,8 +287,8 @@ class ChefMateConfig {
 window.ChefMateConfig = new ChefMateConfig();
 
 // Auto-initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.ChefMateConfig.init();
+document.addEventListener('DOMContentLoaded', async () => {
+    await window.ChefMateConfig.init();
 });
 
 // Export for module systems

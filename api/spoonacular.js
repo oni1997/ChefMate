@@ -29,40 +29,63 @@ export default async function handler(req, res) {
             return;
         }
 
-        // Get API key from environment variables
+        // Get API keys from environment variables (primary and backup)
         const apiKey = process.env.SPOONACULAR_API_KEY;
-        
+        const apiKey2 = process.env.SPOONACULAR_API_KEY_2;
+
         if (!apiKey) {
-            res.status(500).json({ error: 'API key not configured' });
+            res.status(500).json({ error: 'Primary API key not configured' });
             return;
         }
 
-        // Build Spoonacular API URL
-        const baseURL = 'https://api.spoonacular.com';
-        const url = new URL(`${baseURL}${endpoint}`);
-        
-        // Add API key and other parameters
-        url.searchParams.append('apiKey', apiKey);
-        
-        // Add all query parameters from the request
-        Object.entries(queryParams).forEach(([key, value]) => {
-            if (value) {
-                url.searchParams.append(key, value);
+        // Function to make API request with a specific key
+        const makeSpoonacularRequest = async (key, keyName = 'primary') => {
+            const baseURL = 'https://api.spoonacular.com';
+            const url = new URL(`${baseURL}${endpoint}`);
+
+            // Add API key and other parameters
+            url.searchParams.append('apiKey', key);
+
+            // Add all query parameters from the request
+            Object.entries(queryParams).forEach(([paramKey, value]) => {
+                if (value) {
+                    url.searchParams.append(paramKey, value);
+                }
+            });
+
+            console.log(`Fetching from Spoonacular with ${keyName} key:`, url.pathname + url.search);
+
+            const response = await fetch(url.toString());
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Spoonacular API error with ${keyName} key:`, response.status, errorText);
+
+                // Check if this is a quota exceeded error (402)
+                if (response.status === 402 && keyName === 'primary' && apiKey2) {
+                    console.log('🔄 Primary key quota exceeded, trying backup key...');
+                    return null; // Signal to try backup key
+                }
+
+                throw new Error(`Spoonacular API error: ${response.status} - ${errorText}`);
             }
-        });
 
-        console.log('Fetching from Spoonacular:', url.pathname + url.search);
+            return response;
+        };
 
-        // Make request to Spoonacular API
-        const response = await fetch(url.toString());
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Spoonacular API error:', response.status, errorText);
-            
-            res.status(response.status).json({ 
-                error: `Spoonacular API error: ${response.status}`,
-                details: errorText
+        // Try primary key first
+        let response = await makeSpoonacularRequest(apiKey, 'primary');
+
+        // If primary key failed with quota error and we have a backup key, try backup
+        if (response === null && apiKey2) {
+            console.log('🔄 Switching to backup API key...');
+            response = await makeSpoonacularRequest(apiKey2, 'backup');
+        }
+
+        if (!response) {
+            res.status(402).json({
+                error: 'All API keys have reached their quota limit',
+                details: 'Both primary and backup API keys have exceeded their daily limits'
             });
             return;
         }

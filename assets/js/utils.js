@@ -413,79 +413,126 @@ const Utils = {
 // ===== SHOPPING LIST MANAGEMENT =====
 const ShoppingList = {
     // Get all shopping lists
-    getAll() {
+    getAllLists() {
         return Storage.get('chefmate_shopping_lists', []);
     },
-
-    // Create new shopping list
-    create(name, items = []) {
-        const lists = this.getAll();
+    
+    // Create a new shopping list
+    createList(name, items = []) {
+        const lists = this.getAllLists();
         const newList = {
             id: Utils.generateId(),
-            name: name.trim(),
-            items: items.map(item => ({
-                id: Utils.generateId(),
-                name: item.name || item,
-                amount: item.amount || '',
-                unit: item.unit || '',
-                checked: false,
-                addedAt: new Date().toISOString()
-            })),
+            name,
+            items,
             createdAt: new Date().toISOString(),
-            lastModified: new Date().toISOString()
+            updatedAt: new Date().toISOString()
         };
-
+        
         lists.push(newList);
         Storage.set('chefmate_shopping_lists', lists);
         return newList;
     },
-
-    // Add item to shopping list
-    addItem(listId, item) {
-        const lists = this.getAll();
-        const listIndex = lists.findIndex(list => list.id === listId);
-
-        if (listIndex !== -1) {
-            const newItem = {
-                id: Utils.generateId(),
-                name: item.name,
-                amount: item.amount || '',
-                unit: item.unit || '',
-                checked: false,
-                addedAt: new Date().toISOString()
-            };
-
-            lists[listIndex].items.push(newItem);
-            lists[listIndex].lastModified = new Date().toISOString();
-            Storage.set('chefmate_shopping_lists', lists);
-            return newItem;
-        }
-        return null;
+    
+    // Get a specific list by ID
+    getList(listId) {
+        const lists = this.getAllLists();
+        return lists.find(list => list.id === listId);
     },
-
-    // Toggle item checked status
-    toggleItem(listId, itemId) {
-        const lists = this.getAll();
+    
+    // Add items to a shopping list
+    addItems(listId, newItems) {
+        const lists = this.getAllLists();
         const listIndex = lists.findIndex(list => list.id === listId);
-
-        if (listIndex !== -1) {
-            const itemIndex = lists[listIndex].items.findIndex(item => item.id === itemId);
-            if (itemIndex !== -1) {
-                lists[listIndex].items[itemIndex].checked = !lists[listIndex].items[itemIndex].checked;
-                lists[listIndex].lastModified = new Date().toISOString();
-                Storage.set('chefmate_shopping_lists', lists);
-                return true;
+        
+        if (listIndex === -1) return false;
+        
+        // Add new items, avoiding duplicates
+        newItems.forEach(newItem => {
+            const existingItem = lists[listIndex].items.find(item => 
+                item.name.toLowerCase() === newItem.name.toLowerCase());
+                
+            if (existingItem) {
+                // Update existing item
+                existingItem.amount = (parseFloat(existingItem.amount) + parseFloat(newItem.amount)).toString();
+            } else {
+                // Add new item
+                lists[listIndex].items.push({
+                    id: Utils.generateId(),
+                    ...newItem,
+                    checked: false
+                });
             }
-        }
-        return false;
+        });
+        
+        lists[listIndex].updatedAt = new Date().toISOString();
+        Storage.set('chefmate_shopping_lists', lists);
+        return true;
     },
-
-    // Delete shopping list
-    delete(listId) {
-        const lists = this.getAll();
-        const filteredLists = lists.filter(list => list.id !== listId);
-        Storage.set('chefmate_shopping_lists', filteredLists);
-        return filteredLists.length < lists.length;
+    
+    // Update item status (checked/unchecked)
+    updateItemStatus(listId, itemId, checked) {
+        const lists = this.getAllLists();
+        const listIndex = lists.findIndex(list => list.id === listId);
+        
+        if (listIndex === -1) return false;
+        
+        const itemIndex = lists[listIndex].items.findIndex(item => item.id === itemId);
+        if (itemIndex === -1) return false;
+        
+        lists[listIndex].items[itemIndex].checked = checked;
+        lists[listIndex].updatedAt = new Date().toISOString();
+        
+        Storage.set('chefmate_shopping_lists', lists);
+        return true;
+    },
+    
+    // Remove an item from a list
+    removeItem(listId, itemId) {
+        const lists = this.getAllLists();
+        const listIndex = lists.findIndex(list => list.id === listId);
+        
+        if (listIndex === -1) return false;
+        
+        lists[listIndex].items = lists[listIndex].items.filter(item => item.id !== itemId);
+        lists[listIndex].updatedAt = new Date().toISOString();
+        
+        Storage.set('chefmate_shopping_lists', lists);
+        return true;
+    },
+    
+    // Delete a shopping list
+    deleteList(listId) {
+        const lists = this.getAllLists();
+        const updatedLists = lists.filter(list => list.id !== listId);
+        
+        if (updatedLists.length === lists.length) return false;
+        
+        Storage.set('chefmate_shopping_lists', updatedLists);
+        return true;
+    },
+    
+    // Generate a shopping list from recipe ingredients
+    generateFromRecipe(recipe, servings = null) {
+        if (!recipe || !recipe.extendedIngredients) return null;
+        
+        const recipeServings = recipe.servings || 4;
+        const targetServings = servings || recipeServings;
+        const ratio = targetServings / recipeServings;
+        
+        const items = recipe.extendedIngredients.map(ingredient => {
+            const adjustedAmount = (parseFloat(ingredient.amount) * ratio).toFixed(2).replace(/\.00$/, '');
+            
+            return {
+                id: Utils.generateId(),
+                name: ingredient.name,
+                amount: adjustedAmount,
+                unit: ingredient.unit || '',
+                aisle: ingredient.aisle || 'Other',
+                checked: false
+            };
+        });
+        
+        return this.createList(`${recipe.title} - Shopping List`, items);
     }
 };
 
